@@ -1,7 +1,8 @@
 package com.helpdesk.persistence;
-package com.helpdesk.model.Incidencia;
 
 import java.util.ArrayList;
+
+import com.helpdesk.model.Incidencia;
 
 public class IncidenciaRepository {
     private ArrayList<Incidencia> incidencias = new ArrayList<>();

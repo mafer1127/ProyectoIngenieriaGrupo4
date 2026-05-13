@@ -2,6 +2,10 @@ package com.helpdesk.model;
 
 import java.time.LocalDateTime;
 
+import com.helpdesk.model.enums.Categoria;
+import com.helpdesk.model.enums.Estado;
+import com.helpdesk.model.enums.Prioridad;
+
 public class Incidencia {
     private int id;
     private String titulo;
