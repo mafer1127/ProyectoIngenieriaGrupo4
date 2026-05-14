@@ -1,5 +1,6 @@
 package com.helpdesk.controller;
 
+import com.helpdesk.exceptions.ValidacionDatosException;
 import com.helpdesk.model.Tecnico;
 import com.helpdesk.persistence.TecnicoRepository;
 
@@ -15,7 +16,7 @@ public class TecnicoController {
         int id = repo.getAll().size() + 1;
         Tecnico t = new Tecnico(id, nombre, email, true);
         repo.agregar(t);
-        System.out.println(" Técnico registrado correctamente");
+        System.out.println("Técnico registrado correctamente");
     }
 
     public void listarTecnicos() {
@@ -46,7 +47,11 @@ public class TecnicoController {
     }
 
     public Tecnico buscar(int id) {
-        return repo.buscarPorId(id);
+    Tecnico t = repo.buscarPorId(id);
+    if (t == null) {
+        throw new ValidacionDatosException("El técnico no existe.");
     }
+    return t;
+}
 
 }

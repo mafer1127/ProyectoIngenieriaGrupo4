@@ -46,7 +46,7 @@ public class Main {
                     break;
 
                 case 2:
-                    menuIncidencias(sc, controller);
+                    menuIncidencias(sc, controller, tecnicoController);
                     break;
 
                 case 3:
@@ -111,7 +111,7 @@ public class Main {
     // SUBMENÚ: INCIDENCIAS 
     // ============================================================
 
-    private static void menuIncidencias(Scanner sc, IncidenciaController controller) {
+    private static void menuIncidencias(Scanner sc, IncidenciaController controller, TecnicoController tecnicoController) {
 
         int op;
 
@@ -122,6 +122,7 @@ public class Main {
             System.out.println("3. Listar incidencias");
             System.out.println("4. Editar incidencia");
             System.out.println("5. Eliminar incidencia");
+            System.out.println("6. Asignar incidencia a técnico");
             System.out.println("0. Volver");
             System.out.print("Opción: ");
 
@@ -180,6 +181,19 @@ public class Main {
                     System.out.print("ID: ");
                     int idDel = sc.nextInt();
                     controller.eliminarIncidencia(idDel);
+                    break;
+                case 6:
+                    System.out.print("ID de incidencia: ");
+                    int idInc = sc.nextInt();
+
+                    System.out.print("ID de técnico: ");
+                    int idTec = sc.nextInt();
+
+                    try {
+                        controller.asignarTecnico(idInc, idTec, tecnicoController);
+                    } catch (ValidacionDatosException | TecnicoNoDisponibleException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
 
                 case 0:
