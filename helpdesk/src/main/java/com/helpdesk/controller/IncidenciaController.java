@@ -2,8 +2,8 @@ package com.helpdesk.controller;
 
 import com.helpdesk.model.Incidencia;
 import com.helpdesk.model.enums.Categoria;
-import com.helpdesk.model.enums.Prioridad;
 import com.helpdesk.model.enums.Estado;
+import com.helpdesk.model.enums.Prioridad;
 import com.helpdesk.persistence.IncidenciaRepository;
 
 public class IncidenciaController {
@@ -14,6 +14,7 @@ public class IncidenciaController {
         this.repo = repo;
     }
 
+    //Crear Incidencia
     public void crearIncidencia(String titulo, String descripcion, Categoria categoria,
                                 Prioridad prioridad, String solicitante, String email) {
 
@@ -24,6 +25,7 @@ public class IncidenciaController {
         System.out.println("Incidencia creada con ID: " + id);
     }
 
+    //Consultar Incidencia
     public void consultarIncidencia(int id) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
@@ -33,12 +35,14 @@ public class IncidenciaController {
         }
     }
 
+    //Listar Incidencias
     public void listarIncidencias() {
         for (Incidencia i : repo.obtenerTodas()) {
             System.out.println(i);
         }
     }
 
+    //Editar Incidencia
     public void editarIncidencia(int id, String nuevoTitulo, String nuevaDescripcion) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
@@ -57,6 +61,7 @@ public class IncidenciaController {
         System.out.println("Incidencia actualizada.");
     }
 
+    //Eliminar Incidencia
     public void eliminarIncidencia(int id) {
         boolean eliminada = repo.eliminar(id);
         if (eliminada) {

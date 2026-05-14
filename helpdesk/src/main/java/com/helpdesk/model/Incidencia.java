@@ -18,6 +18,8 @@ public class Incidencia {
     private LocalDateTime fechaApertura;
     private LocalDateTime fechaCierre;
 
+    private Tecnico tecnicoAsignado;
+
     public Incidencia(int id, String titulo, String descripcion, Categoria categoria,
                       Prioridad prioridad, String solicitante, String emailSolicitante) {
 
@@ -54,6 +56,9 @@ public class Incidencia {
 
     public LocalDateTime getFechaApertura() { return fechaApertura; }
     public LocalDateTime getFechaCierre() { return fechaCierre; }
+
+    public void setTecnicoAsignado(Tecnico tecnico) { this.tecnicoAsignado = tecnico;}
+    public Tecnico getTecnicoAsignado() { return tecnicoAsignado;}
 
     public void cerrarIncidencia() {
         this.estado = Estado.CERRADA;
