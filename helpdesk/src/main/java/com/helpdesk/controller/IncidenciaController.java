@@ -1,6 +1,7 @@
 package com.helpdesk.controller;
 
 import com.helpdesk.model.Incidencia;
+import com.helpdesk.model.Tecnico;
 import com.helpdesk.model.enums.Categoria;
 import com.helpdesk.model.enums.Estado;
 import com.helpdesk.model.enums.Prioridad;
@@ -29,7 +30,7 @@ public class IncidenciaController {
     public void consultarIncidencia(int id) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
-            System.out.println("No existe una incidencia con ese ID.");
+            System.out.println("No existe una incidencia con ese ID");
         } else {
             System.out.println(i);
         }
@@ -46,28 +47,55 @@ public class IncidenciaController {
     public void editarIncidencia(int id, String nuevoTitulo, String nuevaDescripcion) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
-            System.out.println("Incidencia no encontrada.");
+            System.out.println("Incidencia no encontrada");
             return;
         }
 
         if (i.getEstado() == Estado.CERRADA) {
-            System.out.println("No se puede editar una incidencia cerrada.");
+            System.out.println("No se puede editar una incidencia cerrada");
             return;
         }
 
         i.setTitulo(nuevoTitulo);
         i.setDescripcion(nuevaDescripcion);
 
-        System.out.println("Incidencia actualizada.");
+        System.out.println("Incidencia actualizada");
     }
 
     //Eliminar Incidencia
     public void eliminarIncidencia(int id) {
         boolean eliminada = repo.eliminar(id);
         if (eliminada) {
-            System.out.println("Incidencia eliminada.");
+            System.out.println("Incidencia eliminada");
         } else {
-            System.out.println("No existe una incidencia con ese ID.");
+            System.out.println("No existe una incidencia con ese ID");
         }
     }
+
+    //asignar Técnico
+    public void asignarTecnico(int idIncidencia, int idTecnico, TecnicoController tecnicoController) {
+
+    Tecnico t = tecnicoController.buscar(idTecnico);
+
+    if (t == null) {
+        System.out.println("Técnico no encontrado");
+        return;
+    }
+
+    if (!t.isActivo()) {
+        System.out.println("No se puede asignar una incidencia a un técnico inactivo");
+        return;
+    }
+
+    Incidencia inc = repo.buscarPorId(idIncidencia);
+
+    if (inc == null) {
+        System.out.println("Incidencia no encontrada");
+        return;
+    }
+
+    inc.setTecnicoAsignado(t);
+    System.out.println("Incidencia asignada a " + t.getNombre());
+}
+
 }
