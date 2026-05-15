@@ -40,6 +40,12 @@ public class TecnicoController {
     }
 
     public void listarTecnicos() {
+        //por si esta vacía
+        if (repo.getAll().isEmpty()) {
+        System.out.println("No hay técnicos registrados");
+        return;
+        }
+
         repo.getAll().forEach(System.out::println);
     }
 }

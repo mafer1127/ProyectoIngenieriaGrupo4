@@ -13,6 +13,7 @@ import com.helpdesk.model.enums.Especialidad;
 import com.helpdesk.model.enums.Prioridad;
 import com.helpdesk.persistence.IncidenciaRepository;
 import com.helpdesk.persistence.TecnicoRepository;
+import com.helpdesk.utils.Utils;
 
 public class Main {
 
@@ -185,8 +186,7 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.print("ID: ");
-                    int idConsulta = sc.nextInt();
+                    int idConsulta = Utils.leerIdPositivo(sc, "ID de la incidencia a consultar: ");
                     controller.consultarIncidencia(idConsulta);
                     break;
 
@@ -195,33 +195,19 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.print("ID: ");
-                    int idEdit = sc.nextInt();
-                    sc.nextLine();
-
-                    System.out.print("Nuevo título: ");
-                    String nuevoTitulo = sc.nextLine();
-
-                    System.out.print("Nueva descripción: ");
-                    String nuevaDesc = sc.nextLine();
-
-                    controller.editarIncidencia(idEdit, nuevoTitulo, nuevaDesc);
+                    int idEdit = Utils.leerIdPositivo(sc, "ID de la incidencia a editar: ");
+                    controller.editarIncidencia(idEdit, sc);
                     break;
 
                 case 5:
-                    System.out.print("ID: ");
-                    int idDel = sc.nextInt();
-                    controller.eliminarIncidencia(idDel);
+                    int idEliminar = Utils.leerIdPositivo(sc, "ID de la incidencia a eliminar: ");
+                    controller.eliminarIncidencia(idEliminar);
                     break;
                 case 6:
-                    System.out.print("ID de incidencia: ");
-                    int idInc = sc.nextInt();
-
-                    System.out.print("ID de técnico: ");
-                    int idTec = sc.nextInt();
+                    int idInc = Utils.leerIdPositivo(sc, "ID de incidencia: ");
 
                     try {
-                        controller.asignarTecnico(idInc, idTec, tecnicoController);
+                        controller.asignarTecnico(idInc, sc, tecnicoController);
                     } catch (ValidacionDatosException | TecnicoNoDisponibleException e) {
                         System.out.println("Error: " + e.getMessage());
                     }
@@ -276,16 +262,14 @@ public class Main {
 
                     tecnicoController.crearTecnico(nombre, apellidos, email, esp);
                     break;
-
+    
                     case 2:
-                        System.out.print("ID del técnico: ");
-                        int idAct = sc.nextInt();
+                        int idAct = Utils.leerIdPositivo(sc, "ID del técnico: ");
                         tecnicoController.activar(idAct);
                         break;
 
                     case 3:
-                        System.out.print("ID del técnico: ");
-                        int idDes = sc.nextInt();
+                        int idDes = Utils.leerIdPositivo(sc, "ID del técnico: ");
                         tecnicoController.desactivar(idDes);
                         break;
 

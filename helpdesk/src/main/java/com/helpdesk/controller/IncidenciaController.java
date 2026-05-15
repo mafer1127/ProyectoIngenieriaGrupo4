@@ -1,11 +1,16 @@
 package com.helpdesk.controller;
 
+import java.util.Scanner;
+
+import com.helpdesk.exceptions.TecnicoNoDisponibleException;
+import com.helpdesk.exceptions.ValidacionDatosException;
 import com.helpdesk.model.Incidencia;
 import com.helpdesk.model.Tecnico;
 import com.helpdesk.model.enums.Categoria;
 import com.helpdesk.model.enums.Estado;
 import com.helpdesk.model.enums.Prioridad;
 import com.helpdesk.persistence.IncidenciaRepository;
+import com.helpdesk.utils.Utils;
 
 public class IncidenciaController {
 
@@ -38,13 +43,19 @@ public class IncidenciaController {
 
     //Listar Incidencias
     public void listarIncidencias() {
+        //por si esta vacía
+        if (repo.obtenerTodas().isEmpty()) {
+        System.out.println("No hay incidencias registradas");
+        return;
+    }
+
         for (Incidencia i : repo.obtenerTodas()) {
             System.out.println(i);
         }
     }
 
     //Editar Incidencia
-    public void editarIncidencia(int id, String nuevoTitulo, String nuevaDescripcion) {
+    public void editarIncidencia(int id, Scanner sc) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
             System.out.println("Incidencia no encontrada");
@@ -55,6 +66,12 @@ public class IncidenciaController {
             System.out.println("No se puede editar una incidencia cerrada");
             return;
         }
+
+        System.out.print("Nuevo título: ");
+        String nuevoTitulo = sc.nextLine();
+
+        System.out.print("Nueva descripción: ");
+        String nuevaDescripcion = sc.nextLine();
 
         i.setTitulo(nuevoTitulo);
         i.setDescripcion(nuevaDescripcion);
@@ -73,25 +90,24 @@ public class IncidenciaController {
     }
 
     //asignar Técnico
-    public void asignarTecnico(int idIncidencia, int idTecnico, TecnicoController tecnicoController) {
+    public void asignarTecnico(int idIncidencia, Scanner sc, TecnicoController tecnicoController) 
+        throws ValidacionDatosException, TecnicoNoDisponibleException   {
+    
+    //validar existencia de incidencia 
+    Incidencia inc = repo.buscarPorId(idIncidencia);
+    if (inc == null) {
+        throw new ValidacionDatosException("La incidencia no existe");
+    }
 
+    //validar existencia de técnico
+    int idTecnico = Utils.leerIdPositivo(sc, "ID del técnico: ");
     Tecnico t = tecnicoController.buscar(idTecnico);
-
     if (t == null) {
-        System.out.println("Técnico no encontrado");
-        return;
+        throw new ValidacionDatosException("El técnico no existe");
     }
 
     if (!t.isActivo()) {
-        System.out.println("No se puede asignar una incidencia a un técnico inactivo");
-        return;
-    }
-
-    Incidencia inc = repo.buscarPorId(idIncidencia);
-
-    if (inc == null) {
-        System.out.println("Incidencia no encontrada");
-        return;
+        throw new TecnicoNoDisponibleException("No se puede asignar una incidencia a un técnico inactivo");
     }
 
     // Asignar técnico
