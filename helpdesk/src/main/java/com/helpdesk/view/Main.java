@@ -2,11 +2,14 @@ package com.helpdesk.view;
 
 import java.util.Scanner;
 
+import com.helpdesk.auth.AuthService;
+import com.helpdesk.auth.User;
 import com.helpdesk.controller.IncidenciaController;
 import com.helpdesk.controller.TecnicoController;
 import com.helpdesk.exceptions.TecnicoNoDisponibleException;
 import com.helpdesk.exceptions.ValidacionDatosException;
 import com.helpdesk.model.enums.Categoria;
+import com.helpdesk.model.enums.Especialidad;
 import com.helpdesk.model.enums.Prioridad;
 import com.helpdesk.persistence.IncidenciaRepository;
 import com.helpdesk.persistence.TecnicoRepository;
@@ -16,6 +19,27 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+
+        // ============================
+        // LOGIN
+        // ============================
+        AuthService auth = new AuthService();
+
+        System.out.println("=== LOGIN ===");
+        System.out.print("Usuario: ");
+        String username = sc.nextLine();
+
+        System.out.print("Contraseña: ");
+        String password = sc.nextLine();
+
+        User logged = auth.login(username, password);
+
+        if (logged == null) {
+            System.out.println("Credenciales incorrectas. Saliendo...");
+            return;
+        }
+
+        System.out.println("Bienvenido, rol: " + logged.getRol());
 
 
         IncidenciaRepository repo = new IncidenciaRepository();
@@ -36,8 +60,7 @@ public class Main {
             System.out.println("0. Salir");
             System.out.print("Opción: ");
 
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = leerOpcion(sc);
 
             switch (opcion) {
 
@@ -74,6 +97,16 @@ public class Main {
         sc.close();
     }
 
+    private static int leerOpcion(Scanner sc) {
+    while (!sc.hasNextInt()) {
+        System.out.println("Opción no válida. Ingresa un número válido");
+        sc.nextLine();
+        System.out.print("Opción: ");
+    }
+    int op = sc.nextInt();
+    sc.nextLine();
+    return op;
+    }
     
     // ============================================================
     // SUBMENÚ: CARGA DE DATOS 
@@ -88,8 +121,7 @@ public class Main {
             System.out.println("0. Volver");
             System.out.print("Opción: ");
 
-            op = sc.nextInt();
-            sc.nextLine();
+            op = leerOpcion(sc);
 
             switch (op) {
                 case 1:
@@ -126,8 +158,7 @@ public class Main {
             System.out.println("0. Volver");
             System.out.print("Opción: ");
 
-            op = sc.nextInt();
-            sc.nextLine();
+            op = leerOpcion(sc);
 
             switch (op) {
 
@@ -223,8 +254,8 @@ public class Main {
             System.out.println("0. Volver");
             System.out.print("Opción: ");
 
-            op = sc.nextInt();
-            sc.nextLine();
+            op = leerOpcion(sc);
+            
 
             try {
 
@@ -232,13 +263,19 @@ public class Main {
 
                     case 1:
                         System.out.print("Nombre: ");
-                        String nombre = sc.nextLine();
+                    String nombre = sc.nextLine();
 
-                        System.out.print("Email: ");
-                        String email = sc.nextLine();
+                    System.out.print("Apellidos: ");
+                    String apellidos = sc.nextLine();
 
-                        tecnicoController.crearTecnico(nombre, email);
-                        break;
+                    System.out.print("Email corporativo: ");
+                    String email = sc.nextLine();
+
+                    System.out.print("Especialidad (SISTEMAS/REDES/USUARIO_FINAL/SEGURIDAD): ");
+                    Especialidad esp = Especialidad.valueOf(sc.nextLine().toUpperCase());
+
+                    tecnicoController.crearTecnico(nombre, apellidos, email, esp);
+                    break;
 
                     case 2:
                         System.out.print("ID del técnico: ");
@@ -286,8 +323,7 @@ public class Main {
             System.out.println("0. Volver");
             System.out.print("Opción: ");
 
-            op = sc.nextInt();
-            sc.nextLine();
+            op = leerOpcion(sc);
 
             switch (op) {
                 case 1:
@@ -318,8 +354,7 @@ public class Main {
             System.out.println("0. Volver");
             System.out.print("Opción: ");
 
-            op = sc.nextInt();
-            sc.nextLine();
+            op = leerOpcion(sc);
 
             switch (op) {
                 case 1:

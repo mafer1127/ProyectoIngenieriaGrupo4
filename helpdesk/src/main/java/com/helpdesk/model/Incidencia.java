@@ -1,6 +1,7 @@
 package com.helpdesk.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.helpdesk.model.enums.Categoria;
 import com.helpdesk.model.enums.Estado;
@@ -67,6 +68,8 @@ public class Incidencia {
 
     @Override
     public String toString() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         return "\nID: " + id +
                 "\nTítulo: " + titulo +
                 "\nDescripción: " + descripcion +
@@ -75,8 +78,11 @@ public class Incidencia {
                 "\nSolicitante: " + solicitante +
                 "\nEmail: " + emailSolicitante +
                 "\nEstado: " + estado +
-                "\nFecha apertura: " + fechaApertura +
-                (fechaCierre != null ? "\nFecha cierre: " + fechaCierre : "") +
+                "\nFecha apertura: " + fechaApertura.format(fmt) +
+                (fechaCierre != null ? "\nFecha cierre: " + fechaCierre.format(fmt) : "") +
+                (tecnicoAsignado != null ?
+                "\nTécnico asignado: " + tecnicoAsignado.getNombre() + " " + tecnicoAsignado.getApellidos()
+                : "\nTécnico asignado: (sin asignar)") +
                 "\n-----------------------------";
     }
 }

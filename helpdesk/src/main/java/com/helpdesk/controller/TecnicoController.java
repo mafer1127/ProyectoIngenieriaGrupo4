@@ -2,6 +2,7 @@ package com.helpdesk.controller;
 
 import com.helpdesk.exceptions.ValidacionDatosException;
 import com.helpdesk.model.Tecnico;
+import com.helpdesk.model.enums.Especialidad;
 import com.helpdesk.persistence.TecnicoRepository;
 
 public class TecnicoController {
@@ -12,46 +13,33 @@ public class TecnicoController {
         this.repo = repo;
     }
 
-    public void crearTecnico(String nombre, String email) {
-        int id = repo.getAll().size() + 1;
-        Tecnico t = new Tecnico(id, nombre, email, true);
+    public void crearTecnico(String nombre, String apellidos, String email, Especialidad esp) {
+        Tecnico t = new Tecnico(nombre, apellidos, email, esp);
         repo.agregar(t);
-        System.out.println("Técnico registrado correctamente");
-    }
-
-    public void listarTecnicos() {
-        System.out.println("\n--- LISTA DE TÉCNICOS ---");
-        for (Tecnico t : repo.getAll()) {
-            System.out.println(t.getId() + " - " + t.getNombre() + " (" + (t.isActivo() ? "Activo" : "Inactivo") + ")");
-        }
-    }
-
-    public void activar(int id) {
-        Tecnico t = repo.buscarPorId(id);
-        if (t != null) {
-            t.setActivo(true);
-            System.out.println("Técnico activado");
-        } else {
-            System.out.println("Técnico no encontrado");
-        }
-    }
-
-    public void desactivar(int id) {
-        Tecnico t = repo.buscarPorId(id);
-        if (t != null) {
-            t.setActivo(false);
-            System.out.println("Técnico desactivado");
-        } else {
-            System.out.println("Técnico no encontrado");
-        }
+        System.out.println("Técnico creado con ID: " + t.getId());
     }
 
     public Tecnico buscar(int id) {
-    Tecnico t = repo.buscarPorId(id);
-    if (t == null) {
-        throw new ValidacionDatosException("El técnico no existe.");
+        Tecnico t = repo.buscarPorId(id);
+        if (t == null) {
+            throw new ValidacionDatosException("El técnico no existe");
+        }
+        return t;
     }
-    return t;
-}
 
+    public void activar(int id) {
+        Tecnico t = buscar(id);
+        t.activar();
+        System.out.println("Técnico activado");
+    }
+
+    public void desactivar(int id) {
+        Tecnico t = buscar(id);
+        t.desactivar();
+        System.out.println("Técnico desactivado");
+    }
+
+    public void listarTecnicos() {
+        repo.getAll().forEach(System.out::println);
+    }
 }

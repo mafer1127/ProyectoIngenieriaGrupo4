@@ -94,8 +94,15 @@ public class IncidenciaController {
         return;
     }
 
+    // Asignar técnico
     inc.setTecnicoAsignado(t);
-    System.out.println("Incidencia asignada a " + t.getNombre());
+
+    // Cambiar estado automáticamente
+    inc.setEstado(Estado.EN_CURSO);
+
+    System.out.println("Incidencia " + idIncidencia + " asignada a " 
+                       + t.getNombre() + " " + t.getApellidos() 
+                       + " y ahora está EN_CURSO");
 }
 
 }
