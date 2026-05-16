@@ -21,4 +21,21 @@ public class AuthService {
         }
         return null;
     }
+
+    public boolean exists(String username) {
+        return users.stream().anyMatch(u -> u.getUsername().equals(username));
+    }
+
+    public void register(String username, String password, Rol rol) {
+        users.add(new User(username, password, rol));
+    }
+
+    public User findUser(String username) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
 }

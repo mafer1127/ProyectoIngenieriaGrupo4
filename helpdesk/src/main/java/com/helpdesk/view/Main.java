@@ -3,6 +3,7 @@ package com.helpdesk.view;
 import java.util.Scanner;
 
 import com.helpdesk.auth.AuthService;
+import com.helpdesk.auth.Rol;
 import com.helpdesk.auth.User;
 import com.helpdesk.controller.IncidenciaController;
 import com.helpdesk.controller.TecnicoController;
@@ -21,26 +22,48 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        // ============================
-        // LOGIN
-        // ============================
         AuthService auth = new AuthService();
 
-        System.out.println("=== LOGIN ===");
-        System.out.print("Usuario: ");
-        String username = sc.nextLine();
+        // ============================
+        // MENÚ INICIAL LOGIN / SIGNUP
+        // ============================
+        System.out.println("=== SISTEMA HELP DESK ===");
+        System.out.println("1. Login");
+        System.out.println("2. Sign Up");
+        System.out.println("0. Salir");
+        System.out.print("Opción: ");
 
-        System.out.print("Contraseña: ");
-        String password = sc.nextLine();
+        int inicio = leerOpcion(sc);
+        User logged = null;
 
-        User logged = auth.login(username, password);
+        switch (inicio) {
+            case 1:
+                logged = login(sc, auth);
+                break;
+
+            case 2:
+                signUp(sc, auth);
+                logged = login(sc, auth);
+                break;
+
+            case 0:
+                System.out.println("Saliendo...");
+                return;
+
+            default:
+                System.out.println("Opción no válida");
+                return;
+        }
 
         if (logged == null) {
-            System.out.println("Credenciales incorrectas. Saliendo...");
+            System.out.println("No se pudo iniciar sesión. Saliendo...");
             return;
         }
 
         System.out.println("Bienvenido, rol: " + logged.getRol());
+
+        boolean esTecnico = logged.getRol() == Rol.TECNICO;
+
 
 
         IncidenciaRepository repo = new IncidenciaRepository();
@@ -49,14 +72,27 @@ public class Main {
         TecnicoRepository repoTec = new TecnicoRepository();
         TecnicoController tecnicoController = new TecnicoController(repoTec);
 
+
+        // ============================
+        // MENÚ PRINCIPAL
+        // ============================
+
         int opcion;
 
         do {
             System.out.println("\n=== SISTEMA HELP DESK ===");
-            System.out.println("1. Carga de datos");
+
+            if (esTecnico) {
+                System.out.println("1. Carga de datos");
+            }
+
             System.out.println("2. Incidencias");
-            System.out.println("3. Técnicos");
-            System.out.println("4. Estadísticas");
+
+            if (esTecnico) {
+                System.out.println("3. Técnicos");
+                System.out.println("4. Estadísticas");
+            }
+
             System.out.println("5. Configuración");
             System.out.println("0. Salir");
             System.out.print("Opción: ");
@@ -66,19 +102,22 @@ public class Main {
             switch (opcion) {
 
                 case 1:
-                    menuCargaDatos(sc);
+                    if (esTecnico) menuCargaDatos(sc);
+                    else System.out.println("Opción no válida");
                     break;
 
                 case 2:
-                    menuIncidencias(sc, controller, tecnicoController);
+                    menuIncidencias(sc, controller, tecnicoController, esTecnico);
                     break;
 
                 case 3:
-                    menuTecnicos(sc, tecnicoController);
+                    if (esTecnico) menuTecnicos(sc, tecnicoController);
+                    else System.out.println("Opción no válida");
                     break;
 
                 case 4:
-                    menuEstadisticas(sc);
+                    if (esTecnico) menuEstadisticas(sc);
+                    else System.out.println("Opción no válida");
                     break;
 
                 case 5:
@@ -97,6 +136,114 @@ public class Main {
 
         sc.close();
     }
+
+    // ============================
+    // LOGIN
+    // ============================
+    private static User login(Scanner sc, AuthService auth) {
+        System.out.println("\n=== LOGIN ===");
+
+        int intentosUsuario = 3;
+        User user = null;
+
+        // VALIDAR USUARIO (3 intentos)
+        while (intentosUsuario > 0) {
+
+            System.out.print("Usuario: ");
+            String username = sc.nextLine().trim();
+
+            user = auth.findUser(username);
+
+            if (user != null) {
+                break; // Usuario encontrado
+            }
+
+            intentosUsuario--;
+            System.out.println("Usuario incorrecto. Intentos restantes: " + intentosUsuario);
+
+            if (intentosUsuario == 0) {
+                System.out.println("Demasiados intentos fallidos. Saliendo del sistema...");
+                return null;
+            }
+        }
+
+        // VALIDAR CONTRASEÑA (3 intentos)
+        int intentosPass = 3;
+
+        while (intentosPass > 0) {
+
+            System.out.print("Contraseña: ");
+            String password = sc.nextLine().trim();
+
+            if (user.getPassword().equals(password)) {
+                return user; // LOGIN EXITOSO
+            }
+
+            intentosPass--;
+            System.out.println("Contraseña incorrecta. Intentos restantes: " + intentosPass);
+
+            if (intentosPass == 0) {
+                System.out.println("Demasiados intentos fallidos. Saliendo del sistema...");
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    // ============================
+    // SIGN UP
+    // ============================
+    private static void signUp(Scanner sc, AuthService auth) {
+
+        System.out.println("\n=== REGISTRO ===");
+
+        System.out.print("Nuevo usuario: ");
+        String username = sc.nextLine().trim();
+
+        if (auth.exists(username)) {
+            System.out.println("Ese usuario ya existe");
+            return;
+        }
+
+        System.out.print("Contraseña: ");
+        String password = sc.nextLine().trim();
+
+        // VALIDAR OPCIÓN 1 O 2
+        int tipo = -1;
+
+        while (true) {
+            System.out.println("Tipo de usuario:");
+            System.out.println("1. Usuario");
+            System.out.println("2. Técnico");
+            System.out.print("Opción: ");
+
+            if (!sc.hasNextInt()) {
+                System.out.println("Opción no válida. Debes ingresar 1 o 2");
+                sc.nextLine(); 
+                continue;
+            }
+
+            tipo = sc.nextInt();
+            sc.nextLine(); 
+
+            if (tipo == 1 || tipo == 2) {
+                break; // opción válida
+            }
+
+            System.out.println("Opción no válida. Debes ingresar 1 o 2");
+        }
+
+        Rol rol = (tipo == 2) ? Rol.TECNICO : Rol.USUARIO;
+
+        auth.register(username, password, rol);
+
+        System.out.println("Registro exitoso. Ahora puedes iniciar sesión");
+    }
+
+    // ============================
+    // LECTURA SEGURA DE OPCIONES
+    // ============================
 
     private static int leerOpcion(Scanner sc) {
     while (!sc.hasNextInt()) {
@@ -144,80 +291,90 @@ public class Main {
     // SUBMENÚ: INCIDENCIAS 
     // ============================================================
 
-    private static void menuIncidencias(Scanner sc, IncidenciaController controller, TecnicoController tecnicoController) {
+    private static void menuIncidencias(Scanner sc, IncidenciaController controller, TecnicoController tecnicoController, boolean esTecnico) {
 
-        int op;
+    int op;
 
-        do {
-            System.out.println("\n--- Gestión de Incidencias ---");
-            System.out.println("1. Registrar incidencia");
-            System.out.println("2. Consultar incidencia");
-            System.out.println("3. Listar incidencias");
-            System.out.println("4. Editar incidencia");
-            System.out.println("5. Eliminar incidencia");
+    do {
+        System.out.println("\n--- Gestión de Incidencias ---");
+        System.out.println("1. Registrar incidencia");
+        System.out.println("2. Consultar incidencia");
+        System.out.println("3. Listar incidencias");
+        System.out.println("4. Editar incidencia");
+        System.out.println("5. Eliminar incidencia");
+
+        if (esTecnico) {
             System.out.println("6. Asignar incidencia a técnico");
-            System.out.println("0. Volver");
-            System.out.print("Opción: ");
+        }
 
-            op = leerOpcion(sc);
+        System.out.println("0. Volver");
+        System.out.print("Opción: ");
 
-            switch (op) {
+        op = leerOpcion(sc);
 
-                case 1:
-                    System.out.print("Título: ");
-                    String titulo = sc.nextLine();
+        switch (op) {
 
-                    System.out.print("Descripción: ");
-                    String descripcion = sc.nextLine();
+            case 1:
+                System.out.print("Título: ");
+                String titulo = sc.nextLine();
 
-                    Categoria categoria = Utils.leerEnumValido(sc, "Categoría (HARDWARE/SOFTWARE/RED/ACCESO/OTRO): ", Categoria.class);
+                System.out.print("Descripción: ");
+                String descripcion = sc.nextLine();
 
-                    Prioridad prioridad = Utils.leerEnumValido(sc, "Prioridad (BAJA/MEDIA/ALTA/CRITICA): ", Prioridad.class);
+                Categoria categoria = Utils.leerEnumValido(sc, "Categoría (HARDWARE/SOFTWARE/RED/ACCESO/OTRO): ", Categoria.class);
 
-                    String solicitante = Utils.leerNombreValido(sc, "Nombre del solicitante: ");
+                Prioridad prioridad = Utils.leerEnumValido(sc, "Prioridad (BAJA/MEDIA/ALTA/CRITICA): ", Prioridad.class);
 
-                    String emailCliente = Utils.leerEmailValido(sc, "Email: ");
+                String solicitante = Utils.leerNombreValido(sc, "Nombre del solicitante: ");
 
-                    controller.crearIncidencia(titulo, descripcion, categoria, prioridad, solicitante, emailCliente);
-                    break;
+                String emailCliente = Utils.leerEmailValido(sc, "Email: ");
 
-                case 2:
-                    int idConsulta = Utils.leerIdPositivo(sc, "ID de la incidencia a consultar: ");
-                    controller.consultarIncidencia(idConsulta);
-                    break;
+                controller.crearIncidencia(titulo, descripcion, categoria, prioridad, solicitante, emailCliente);
+                break;
 
-                case 3:
-                    controller.listarIncidencias();
-                    break;
+            case 2:
+                int idConsulta = Utils.leerIdPositivo(sc, "ID de la incidencia a consultar: ");
+                controller.consultarIncidencia(idConsulta);
+                break;
 
-                case 4:
-                    int idEdit = Utils.leerIdPositivo(sc, "ID de la incidencia a editar: ");
-                    controller.editarIncidencia(idEdit, sc);
-                    break;
+            case 3:
+                controller.listarIncidencias();
+                break;
 
-                case 5:
-                    int idEliminar = Utils.leerIdPositivo(sc, "ID de la incidencia a eliminar: ");
-                    controller.eliminarIncidencia(idEliminar);
-                    break;
-                case 6:
-                    int idInc = Utils.leerIdPositivo(sc, "ID de incidencia: ");
+            case 4:
+                int idEdit = Utils.leerIdPositivo(sc, "ID de la incidencia a editar: ");
+                controller.editarIncidencia(idEdit, sc);
+                break;
 
-                    try {
-                        controller.asignarTecnico(idInc, sc, tecnicoController);
-                    } catch (ValidacionDatosException | TecnicoNoDisponibleException e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
+            case 5:
+                int idEliminar = Utils.leerIdPositivo(sc, "ID de la incidencia a eliminar: ");
+                controller.eliminarIncidencia(idEliminar);
+                break;
 
-                case 0:
-                    break;
-
-                default:
+            case 6:
+                if (!esTecnico) {
                     System.out.println("Opción no válida");
-            }
+                    break;
+                }
 
-        } while (op != 0);
-    }
+                int idInc = Utils.leerIdPositivo(sc, "ID de incidencia: ");
+
+                try {
+                    controller.asignarTecnico(idInc, sc, tecnicoController);
+                } catch (ValidacionDatosException | TecnicoNoDisponibleException e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
+                break;
+
+            case 0:
+                break;
+
+            default:
+                System.out.println("Opción no válida");
+        }
+
+    } while (op != 0);
+}
 
     // ============================================================
     // SUBMENÚ: TÉCNICOS
