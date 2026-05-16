@@ -15,6 +15,7 @@ import com.helpdesk.model.enums.Prioridad;
 import com.helpdesk.persistence.IncidenciaRepository;
 import com.helpdesk.persistence.TecnicoRepository;
 import com.helpdesk.utils.Utils;
+import com.helpdesk.utils.UtilsAuth;
 
 public class Main {
 
@@ -38,12 +39,12 @@ public class Main {
 
         switch (inicio) {
             case 1:
-                logged = login(sc, auth);
+                logged = UtilsAuth.loginSeguro(sc, auth);
                 break;
 
             case 2:
                 signUp(sc, auth);
-                logged = login(sc, auth);
+                logged = UtilsAuth.loginSeguro(sc, auth);
                 break;
 
             case 0:
@@ -138,101 +139,22 @@ public class Main {
     }
 
     // ============================
-    // LOGIN
-    // ============================
-    private static User login(Scanner sc, AuthService auth) {
-        System.out.println("\n=== LOGIN ===");
-
-        int intentosUsuario = 3;
-        User user = null;
-
-        // VALIDAR USUARIO (3 intentos)
-        while (intentosUsuario > 0) {
-
-            System.out.print("Usuario: ");
-            String username = sc.nextLine().trim();
-
-            user = auth.findUser(username);
-
-            if (user != null) {
-                break; // Usuario encontrado
-            }
-
-            intentosUsuario--;
-            System.out.println("Usuario incorrecto. Intentos restantes: " + intentosUsuario);
-
-            if (intentosUsuario == 0) {
-                System.out.println("Demasiados intentos fallidos. Saliendo del sistema...");
-                return null;
-            }
-        }
-
-        // VALIDAR CONTRASEÑA (3 intentos)
-        int intentosPass = 3;
-
-        while (intentosPass > 0) {
-
-            System.out.print("Contraseña: ");
-            String password = sc.nextLine().trim();
-
-            if (user.getPassword().equals(password)) {
-                return user; // LOGIN EXITOSO
-            }
-
-            intentosPass--;
-            System.out.println("Contraseña incorrecta. Intentos restantes: " + intentosPass);
-
-            if (intentosPass == 0) {
-                System.out.println("Demasiados intentos fallidos. Saliendo del sistema...");
-                return null;
-            }
-        }
-
-        return null;
-    }
-
-    // ============================
     // SIGN UP
     // ============================
     private static void signUp(Scanner sc, AuthService auth) {
 
         System.out.println("\n=== REGISTRO ===");
 
-        System.out.print("Nuevo usuario: ");
-        String username = sc.nextLine().trim();
+        String username = UtilsAuth.leerUsernameValido(sc);
 
         if (auth.exists(username)) {
-            System.out.println("Ese usuario ya existe");
+            System.out.println("Ese usuario ya existe.");
             return;
         }
 
-        System.out.print("Contraseña: ");
-        String password = sc.nextLine().trim();
+        String password = UtilsAuth.leerPasswordSegura(sc);
 
-        // VALIDAR OPCIÓN 1 O 2
-        int tipo = -1;
-
-        while (true) {
-            System.out.println("Tipo de usuario:");
-            System.out.println("1. Usuario");
-            System.out.println("2. Técnico");
-            System.out.print("Opción: ");
-
-            if (!sc.hasNextInt()) {
-                System.out.println("Opción no válida. Debes ingresar 1 o 2");
-                sc.nextLine(); 
-                continue;
-            }
-
-            tipo = sc.nextInt();
-            sc.nextLine(); 
-
-            if (tipo == 1 || tipo == 2) {
-                break; // opción válida
-            }
-
-            System.out.println("Opción no válida. Debes ingresar 1 o 2");
-        }
+        int tipo = UtilsAuth.leerOpcionRol(sc);
 
         Rol rol = (tipo == 2) ? Rol.TECNICO : Rol.USUARIO;
 
@@ -246,14 +168,14 @@ public class Main {
     // ============================
 
     private static int leerOpcion(Scanner sc) {
-    while (!sc.hasNextInt()) {
-        System.out.println("Opción no válida. Ingresa un número válido");
+        while (!sc.hasNextInt()) {
+            System.out.println("Opción no válida. Ingresa un número válido");
+            sc.nextLine();
+            System.out.print("Opción: ");
+        }
+        int op = sc.nextInt();
         sc.nextLine();
-        System.out.print("Opción: ");
-    }
-    int op = sc.nextInt();
-    sc.nextLine();
-    return op;
+        return op;
     }
     
     // ============================================================
