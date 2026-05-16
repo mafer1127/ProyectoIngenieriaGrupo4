@@ -170,19 +170,15 @@ public class Main {
                     System.out.print("Descripción: ");
                     String descripcion = sc.nextLine();
 
-                    System.out.print("Categoría (HARDWARE/SOFTWARE/RED/ACCESO/OTRO): ");
-                    Categoria categoria = Categoria.valueOf(sc.nextLine().toUpperCase());
+                    Categoria categoria = Utils.leerEnumValido(sc, "Categoría (HARDWARE/SOFTWARE/RED/ACCESO/OTRO): ", Categoria.class);
 
-                    System.out.print("Prioridad (BAJA/MEDIA/ALTA/CRITICA): ");
-                    Prioridad prioridad = Prioridad.valueOf(sc.nextLine().toUpperCase());
+                    Prioridad prioridad = Utils.leerEnumValido(sc, "Prioridad (BAJA/MEDIA/ALTA/CRITICA): ", Prioridad.class);
 
-                    System.out.print("Solicitante: ");
-                    String solicitante = sc.nextLine();
+                    String solicitante = Utils.leerNombreValido(sc, "Nombre del solicitante: ");
 
-                    System.out.print("Email solicitante: ");
-                    String email = sc.nextLine();
+                    String emailCliente = Utils.leerEmailValido(sc, "Email: ");
 
-                    controller.crearIncidencia(titulo, descripcion, categoria, prioridad, solicitante, email);
+                    controller.crearIncidencia(titulo, descripcion, categoria, prioridad, solicitante, emailCliente);
                     break;
 
                 case 2:
@@ -248,17 +244,13 @@ public class Main {
                 switch (op) {
 
                     case 1:
-                        System.out.print("Nombre: ");
-                    String nombre = sc.nextLine();
+                    String nombre = Utils.leerNombreValido(sc, "Nombre: ");
 
-                    System.out.print("Apellidos: ");
-                    String apellidos = sc.nextLine();
+                    String apellidos = Utils.leerNombreValido(sc, "Apellidos: ");
 
-                    System.out.print("Email corporativo: ");
-                    String email = sc.nextLine();
+                    String email = Utils.leerEmailValido(sc, "Ingrese el email: ");
 
-                    System.out.print("Especialidad (SISTEMAS/REDES/USUARIO_FINAL/SEGURIDAD): ");
-                    Especialidad esp = Especialidad.valueOf(sc.nextLine().toUpperCase());
+                    Especialidad esp = Utils.leerEnumValido(sc, "Especialidad (SISTEMAS/REDES/USUARIO_FINAL/SEGURIDAD): ", Especialidad.class);
 
                     tecnicoController.crearTecnico(nombre, apellidos, email, esp);
                     break;
