@@ -94,7 +94,7 @@ public class Main {
                 System.out.println("4. Estadísticas");
             }
 
-            System.out.println("5. Configuración");
+            System.out.println("5. Historial");
             System.out.println("0. Salir");
             System.out.print("Opción: ");
 
@@ -122,7 +122,7 @@ public class Main {
                     break;
 
                 case 5:
-                    menuConfiguracion(sc);
+                    //menuHistorial(sc);
                     break;
 
                 case 0:
@@ -396,34 +396,4 @@ public class Main {
         } while (op != 0);
     }
 
-    // ============================================================
-    // SUBMENÚ: CONFIGURACIÓN
-    // ============================================================
-
-    private static void menuConfiguracion(Scanner sc) {
-        int op;
-        do {
-            System.out.println("\n--- Configuración ---");
-            System.out.println("1. Notificaciones (RF8)");
-            System.out.println("2. Historial de cambios (RF13)");
-            System.out.println("0. Volver");
-            System.out.print("Opción: ");
-
-            op = leerOpcion(sc);
-
-            switch (op) {
-                case 1:
-                    System.out.println("Notificaciones (pendiente)");
-                    break;
-                case 2:
-                    System.out.println("Historial de cambios (pendiente)");
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Opción no válida");
-            }
-
-        } while (op != 0);
-    }
 }
