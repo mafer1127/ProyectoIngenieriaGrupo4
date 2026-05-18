@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "titulo": "Pantalla azul al iniciar",
+    "descripcion": "El equipo muestra pantalla azul al arrancar Windows.",
+    "categoria": "HARDWARE",
+    "prioridad": "ALTA",
+    "estado": "EN_ESPERA",
+    "fechaApertura": "2025-04-12T08:45",
+    "fechaCierre": null,
+    "solicitante": "Laura Medina",
+    "emailSolicitante": "laura.medina@empresa.com",
+    "idTecnico": 1
+  },
+  {
+    "id": 2,
+    "titulo": "VPN no conecta",
+    "descripcion": "El usuario no puede conectarse a la VPN corporativa.",
+    "categoria": "RED",
+    "prioridad": "MEDIA",
+    "estado": "EN_CURSO",
+    "fechaApertura": "2025-04-15T10:20",
+    "fechaCierre": null,
+    "solicitante": "Sergio Ramos",
+    "emailSolicitante": "sergio.ramos@empresa.com",
+    "idTecnico": 2
+  },
+  {
+    "id": 3,
+    "titulo": "Error al acceder a la base de datos",
+    "descripcion": "La aplicación no puede conectarse a la base de datos Oracle.",
+    "categoria": "SOFTWARE",
+    "prioridad": "ALTA",
+    "estado": "CERRADA",
+    "fechaApertura": "2025-04-10T09:00",
+    "fechaCierre": "2025-04-10T11:30",
+    "solicitante": "Isabel Torres",
+    "emailSolicitante": "isabel.torres@empresa.com",
+    "idTecnico": 3
+  }
+]

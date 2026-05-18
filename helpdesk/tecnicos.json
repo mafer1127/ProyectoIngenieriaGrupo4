@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "María",
+    "apellidos": "Serrano López",
+    "email": "maria.serrano@empresa.com",
+    "especialidad": "SISTEMAS",
+    "activo": true
+  },
+  {
+    "id": 2,
+    "nombre": "Javier",
+    "apellidos": "Pérez Martín",
+    "email": "javier.perez@empresa.com",
+    "especialidad": "REDES",
+    "activo": true
+  },
+  {
+    "id": 3,
+    "nombre": "Elena",
+    "apellidos": "Ruiz Torres",
+    "email": "elena.ruiz@empresa.com",
+    "especialidad": "SEGURIDAD",
+    "activo": false
+  }
+]
