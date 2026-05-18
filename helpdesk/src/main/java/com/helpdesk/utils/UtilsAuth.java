@@ -7,7 +7,9 @@ import com.helpdesk.auth.User;
 
 public class UtilsAuth {
 
-    // VALIDAR NOMBRE DE USUARIO
+    // ============================================================
+    // VALIDACIÓN DE NOMBRE DE USUARIO
+    // ============================================================
     public static String leerUsernameValido(Scanner sc) {
         String username;
 
@@ -24,7 +26,9 @@ public class UtilsAuth {
         }
     }
 
-    // VALIDAR CONTRASEÑA SEGURA
+    // ============================================================
+    // VALIDACIÓN DE CONTRASEÑA SEGURA
+    // ============================================================
     public static String leerPasswordSegura(Scanner sc) {
         String password;
 
@@ -45,7 +49,9 @@ public class UtilsAuth {
         }
     }
 
-    // VALIDAR OPCIÓN 1 O 2 
+    // ============================================================
+    // VALIDACIÓN DE OPCIÓN DE ROL (1 O 2)
+    // ============================================================
     public static int leerOpcionRol(Scanner sc) {
         int tipo;
 
@@ -72,8 +78,9 @@ public class UtilsAuth {
         }
     }
 
-
-    // LOGIN COMPLETO (3 intentos y contraseña)
+    // ============================================================
+    // LOGIN COMPLETO (VALIDA USUARIO Y CONTRASEÑA)
+    // ============================================================
     public static User loginSeguro(Scanner sc, AuthService auth) {
 
         System.out.println("\n=== LOGIN ===");
@@ -81,7 +88,9 @@ public class UtilsAuth {
         int intentosUsuario = 3;
         User user = null;
 
+        // ------------------------------------------------------------
         // VALIDAR USUARIO
+        // ------------------------------------------------------------
         while (intentosUsuario > 0) {
 
             System.out.print("Usuario: ");
@@ -102,7 +111,9 @@ public class UtilsAuth {
             }
         }
 
+        // ------------------------------------------------------------
         // VALIDAR CONTRASEÑA
+        // ------------------------------------------------------------
         int intentosPass = 3;
 
         while (intentosPass > 0) {

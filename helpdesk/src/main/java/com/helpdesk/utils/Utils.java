@@ -7,12 +7,17 @@ import java.util.Scanner;
 
 public class Utils {
 
+    // ============================================================
+    // LIMPIEZA DE PANTALLA
+    // ============================================================
     public static void limpiarPantalla() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
-    //Leer opciones de menú, validando que sean enteros
+    // ============================================================
+    // LECTURA DE OPCIONES DE MENÚ
+    // ============================================================
     public static int leerOpcion(Scanner sc) {
         while (!sc.hasNextInt()) {
             System.out.println("Opción no válida. Ingresa un número válido");
@@ -24,7 +29,9 @@ public class Utils {
         return op;
     }
 
-    //validación de datos para ID entero positivo
+    // ============================================================
+    // VALIDACIÓN DE ID ENTERO POSITIVO
+    // ============================================================
     public static int leerIdPositivo(Scanner sc, String mensaje) {
         int id;
 
@@ -48,7 +55,9 @@ public class Utils {
         }
     }
 
-    //validación de formato de email
+    // ============================================================
+    // VALIDACIÓN DE EMAIL
+    // ============================================================
     public static String leerEmailValido(Scanner sc, String mensaje) {
         String email;
 
@@ -56,7 +65,6 @@ public class Utils {
             System.out.print(mensaje);
             email = sc.nextLine().trim();
 
-            // Expresión regular para validar email
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 System.out.println("Error: formato de email inválido. Ejemplo válido: usuario@correo.com");
                 continue;
@@ -66,7 +74,9 @@ public class Utils {
         }
     }
 
-    //validación de nombres (solo letras, espacios simples, tildes y ñ)
+    // ============================================================
+    // VALIDACIÓN DE NOMBRES (LETRAS + ESPACIOS)
+    // ============================================================
     public static String leerNombreValido(Scanner sc, String mensaje) {
         String nombre;
 
@@ -74,7 +84,6 @@ public class Utils {
             System.out.print(mensaje);
             nombre = sc.nextLine().trim();
 
-            // Solo letras, espacios simples, tildes y ñ
             if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$")) {
                 System.out.println("Error: el nombre solo puede contener letras y espacios simples");
                 continue;
@@ -84,13 +93,14 @@ public class Utils {
         }
     }
 
-    //validación de opciones de enum
+    // ============================================================
+    // LECTURA DE ENUM (OBLIGATORIO)
+    // ============================================================
     public static <T extends Enum<T>> T leerEnumValido(Scanner sc, String mensaje, Class<T> enumClass) {
-        T valor = null;
+        T valor;
 
         while (true) {
             System.out.print(mensaje);
-
             String input = sc.nextLine().trim().toUpperCase();
 
             try {
@@ -99,40 +109,41 @@ public class Utils {
 
             } catch (IllegalArgumentException e) {
                 System.out.println("Valor inválido. Las opciones válidas son:");
-
                 for (T v : enumClass.getEnumConstants()) {
                     System.out.println(" - " + v.name());
                 }
-
                 System.out.println("Inténtelo de nuevo\n");
             }
         }
     }
 
-    // Lectura de opciones de enum, pero permite dejar en blanco para omitir el filtro
+    // ============================================================
+    // LECTURA DE ENUM (OPCIONAL)
+    // ============================================================
     public static <T extends Enum<T>> T leerEnumOpcional(Scanner sc, String mensaje, Class<T> tipo) {
-    while (true) {
-        System.out.print(mensaje);
-        String input = sc.nextLine().trim().toUpperCase();
+        while (true) {
+            System.out.print(mensaje);
+            String input = sc.nextLine().trim().toUpperCase();
 
-        // ENTER  no aplicar filtro
-        if (input.isBlank()) {
-            return null;
-        }
-
-        try {
-            return Enum.valueOf(tipo, input);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Valor inválido. Opciones válidas:");
-            for (T val : tipo.getEnumConstants()) {
-                System.out.print(val + " ");
+            if (input.isBlank()) {
+                return null;
             }
-            System.out.println("\nIntente de nuevo\n");
+
+            try {
+                return Enum.valueOf(tipo, input);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Valor inválido. Opciones válidas:");
+                for (T val : tipo.getEnumConstants()) {
+                    System.out.print(val + " ");
+                }
+                System.out.println("\nIntente de nuevo\n");
+            }
         }
     }
-}
 
-    // Lectura de fechas, permite dejar en blanco para omitir el filtro
+    // ============================================================
+    // LECTURA DE FECHAS (OPCIONAL)
+    // ============================================================
     public static LocalDate leerFechaOpcional(Scanner sc, String mensaje) {
         while (true) {
             System.out.print(mensaje);
@@ -147,6 +158,4 @@ public class Utils {
             }
         }
     }
-
-
 }

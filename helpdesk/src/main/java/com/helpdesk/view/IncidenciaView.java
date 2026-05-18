@@ -8,9 +8,11 @@ import com.helpdesk.model.Incidencia;
 import com.helpdesk.model.RegistroHistorial;
 import com.helpdesk.utils.Utils;
 
-
 public class IncidenciaView {
 
+    // ============================================================
+    // MOSTRAR HISTORIAL DE CAMBIOS
+    // ============================================================
     public void mostrarHistorial(Scanner sc, IncidenciaController controller) {
 
         System.out.println("\n--- Historial de Cambios ---");
@@ -35,6 +37,9 @@ public class IncidenciaView {
         }
     }
 
+    // ============================================================
+    // MENÚ DE LISTADO DE INCIDENCIAS
+    // ============================================================
     public void menuListarIncidencias(Scanner sc, IncidenciaController controller, TecnicoController tecnicoController) {
 
         int op;

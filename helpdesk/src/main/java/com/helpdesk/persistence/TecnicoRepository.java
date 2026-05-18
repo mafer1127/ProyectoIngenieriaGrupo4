@@ -14,9 +14,11 @@ public class TecnicoRepository {
     private ArrayList<Tecnico> tecnicos = new ArrayList<>();
     private int contadorId = 1;
 
-    // ============================================
+    // ============================================================
+    // CONSTRUCTORES
+    // ============================================================
+
     // Constructor con carga inicial
-    // ============================================
     public TecnicoRepository(List<Tecnico> listaInicial) {
         if (listaInicial != null) {
             this.tecnicos = new ArrayList<>(listaInicial);
@@ -29,15 +31,14 @@ public class TecnicoRepository {
         }
     }
 
-    // ============================================
     // Constructor vacío
-    // ============================================
     public TecnicoRepository() {
     }
 
-    // ============================================
-    // Setter para recargar datos
-    // ============================================
+    // ============================================================
+    // RECARGA DE DATOS
+    // ============================================================
+
     public void setTecnicos(List<Tecnico> nuevos) {
         this.tecnicos = new ArrayList<>(nuevos);
 
@@ -48,9 +49,11 @@ public class TecnicoRepository {
         }
     }
 
-    // ============================================
+    // ============================================================
+    // CRUD BÁSICO
+    // ============================================================
+
     // ID autoincremental
-    // ============================================
     public int generarId() {
         return contadorId++;
     }
@@ -70,12 +73,13 @@ public class TecnicoRepository {
         return tecnicos;
     }
 
-    // ===============  PERSISTENCIA JSON  =================
+    // ============================================================
+    // ====================  PERSISTENCIA JSON  ====================
     // ============================================================
 
-    // -------------------------
+    // ------------------------------------------------------------
     // Guardar texto en archivo
-    // -------------------------
+    // ------------------------------------------------------------
     private void guardarTexto(String ruta, String contenido) {
         try (FileWriter fw = new FileWriter(ruta)) {
             fw.write(contenido);
@@ -85,9 +89,9 @@ public class TecnicoRepository {
         }
     }
 
-    // -------------------------
+    // ------------------------------------------------------------
     // Leer texto de archivo
-    // -------------------------
+    // ------------------------------------------------------------
     private String leerTexto(String ruta) {
         try {
             return Files.readString(Path.of(ruta));
@@ -97,9 +101,9 @@ public class TecnicoRepository {
         }
     }
 
-    // -------------------------
+    // ------------------------------------------------------------
     // Guardar técnicos en JSON
-    // -------------------------
+    // ------------------------------------------------------------
     public void guardarEnJson() {
         StringBuilder sb = new StringBuilder();
         sb.append("[\n");
@@ -125,9 +129,9 @@ public class TecnicoRepository {
         guardarTexto("tecnicos.json", sb.toString());
     }
 
-    // -------------------------
+    // ------------------------------------------------------------
     // Cargar técnicos desde JSON externo
-    // -------------------------
+    // ------------------------------------------------------------
     public boolean cargarDesdeArchivoExterno(String ruta) {
         String contenido = leerTexto(ruta);
 

@@ -22,11 +22,16 @@ public class IncidenciaController {
 
     private IncidenciaRepository repo;
 
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
     public IncidenciaController(IncidenciaRepository repo) {
         this.repo = repo;
     }
 
-    // Crear Incidencia
+    // ============================================================
+    // CREAR INCIDENCIA
+    // ============================================================
     public void crearIncidencia(String titulo, String descripcion, Categoria categoria,
                                 Prioridad prioridad, String solicitante, String email) {
 
@@ -37,7 +42,9 @@ public class IncidenciaController {
         System.out.println("Incidencia creada con ID: " + id);
     }
 
-    // Consultar Incidencia
+    // ============================================================
+    // CONSULTAR INCIDENCIA
+    // ============================================================
     public void consultarIncidencia(int id) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
@@ -47,7 +54,9 @@ public class IncidenciaController {
         }
     }
 
-    // Listar Incidencias
+    // ============================================================
+    // LISTAR INCIDENCIAS
+    // ============================================================
     public void listarIncidencias() {
         if (repo.obtenerTodas().isEmpty()) {
             System.out.println("No hay incidencias registradas");
@@ -59,7 +68,9 @@ public class IncidenciaController {
         }
     }
 
-    // Editar Incidencia
+    // ============================================================
+    // EDITAR INCIDENCIA
+    // ============================================================
     public void editarIncidencia(int id, Scanner sc) {
         Incidencia i = repo.buscarPorId(id);
         if (i == null) {
@@ -84,7 +95,9 @@ public class IncidenciaController {
         System.out.println("Incidencia actualizada");
     }
 
-    // Eliminar Incidencia
+    // ============================================================
+    // ELIMINAR INCIDENCIA
+    // ============================================================
     public void eliminarIncidencia(int id) {
         boolean eliminada = repo.eliminar(id);
         if (eliminada) {
@@ -94,7 +107,9 @@ public class IncidenciaController {
         }
     }
 
-    // Asignar Técnico
+    // ============================================================
+    // ASIGNAR TÉCNICO
+    // ============================================================
     public void asignarTecnico(int idIncidencia, Scanner sc, TecnicoController tecnicoController)
             throws ValidacionDatosException, TecnicoNoDisponibleException {
 
@@ -122,9 +137,11 @@ public class IncidenciaController {
                 + " y ahora está EN_CURSO");
     }
 
-    public IncidenciaRepository getRepo() { return repo;}
+    public IncidenciaRepository getRepo() { return repo; }
 
-    // Cambiar estado (incluye resuelta y cerrada)
+    // ============================================================
+    // CAMBIAR ESTADO DE INCIDENCIA
+    // ============================================================
     public void cambiarEstado(int idIncidencia, Scanner sc, TecnicoController tecnicoController) {
 
         Incidencia inc = repo.buscarPorId(idIncidencia);
@@ -176,7 +193,7 @@ public class IncidenciaController {
             return;
         }
 
-        int opcion = -1;
+        int opcion;
 
         while (true) {
             System.out.print("Seleccione opción: ");
@@ -249,7 +266,9 @@ public class IncidenciaController {
         }
     }
 
-    // Filtro de Incidencias
+    // ============================================================
+    // FILTRO DE INCIDENCIAS
+    // ============================================================
     public void filtrarIncidencias(Scanner sc, TecnicoController tecnicoController) {
 
         while (true) {
@@ -276,6 +295,9 @@ public class IncidenciaController {
         }
     }
 
+    // ------------------------------------------------------------
+    // Filtros individuales
+    // ------------------------------------------------------------
     private void filtrarPorCategoria(Scanner sc) {
         System.out.println("\nCategorías disponibles:");
         int i = 1;
@@ -383,10 +405,9 @@ public class IncidenciaController {
         lista.forEach(System.out::println);
     }
 
-
-
-
-    // Devuelve una lista con las incidencias críticas abiertas más de 4 horas
+    // ============================================================
+    // INCIDENCIAS CRÍTICAS ABIERTAS > 4 HORAS
+    // ============================================================
     public List<Incidencia> obtenerIncidenciasCriticas() {
         List<Incidencia> criticas = new ArrayList<>();
 
@@ -409,7 +430,9 @@ public class IncidenciaController {
         return criticas;
     }
 
-    // Obtener incidencias del mes actual
+    // ============================================================
+    // INCIDENCIAS DEL MES ACTUAL
+    // ============================================================
     public List<Incidencia> obtenerIncidenciasDelMes() {
         YearMonth mesActual = YearMonth.now();
 
@@ -417,5 +440,4 @@ public class IncidenciaController {
                 .filter(i -> YearMonth.from(i.getFechaApertura().toLocalDate()).equals(mesActual))
                 .toList();
     }
-
 }

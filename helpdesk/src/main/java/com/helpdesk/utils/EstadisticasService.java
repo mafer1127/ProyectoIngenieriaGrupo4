@@ -12,10 +12,20 @@ public class EstadisticasService {
 
     private IncidenciaRepository repo;
 
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
     public EstadisticasService(IncidenciaRepository repo) {
         this.repo = repo;
     }
 
+    // ============================================================
+    // ESTADÍSTICAS POR ATRIBUTOS
+    // ============================================================
+
+    // ------------------------------------------------------------
+    // Incidencias por categoría
+    // ------------------------------------------------------------
     public void incidenciasPorCategoria() {
         System.out.println("\n--- Incidencias por categoría ---");
 
@@ -30,6 +40,9 @@ public class EstadisticasService {
             .forEach((cat, count) -> System.out.println(cat + ": " + count));
     }
 
+    // ------------------------------------------------------------
+    // Incidencias por prioridad
+    // ------------------------------------------------------------
     public void incidenciasPorPrioridad() {
         System.out.println("\n--- Incidencias por prioridad ---");
 
@@ -44,6 +57,9 @@ public class EstadisticasService {
             .forEach((p, count) -> System.out.println(p + ": " + count));
     }
 
+    // ------------------------------------------------------------
+    // Incidencias por estado
+    // ------------------------------------------------------------
     public void incidenciasPorEstado() {
         System.out.println("\n--- Incidencias por estado ---");
 
@@ -58,6 +74,13 @@ public class EstadisticasService {
             .forEach((e, count) -> System.out.println(e + ": " + count));
     }
 
+    // ============================================================
+    // TIEMPOS Y SLA
+    // ============================================================
+
+    // ------------------------------------------------------------
+    // Tiempo promedio de resolución por categoría
+    // ------------------------------------------------------------
     public void tiempoPromedioPorCategoria() {
         System.out.println("\n--- Tiempo promedio de resolución por categoría ---");
 
@@ -80,6 +103,9 @@ public class EstadisticasService {
             .forEach((cat, min) -> System.out.println(cat + ": " + min + " min"));
     }
 
+    // ------------------------------------------------------------
+    // SLA para incidencias críticas (< 4h)
+    // ------------------------------------------------------------
     public void slaCriticas() {
         List<Incidencia> criticas = repo.obtenerTodas().stream()
             .filter(i -> i.getPrioridad() == Prioridad.CRITICA)
@@ -106,6 +132,9 @@ public class EstadisticasService {
         System.out.printf("Cumplimiento SLA         : %.1f%%%n", porcentaje);
     }
 
+    // ------------------------------------------------------------
+    // Tiempo medio de resolución por técnico
+    // ------------------------------------------------------------
     public void tiempoMedioPorTecnico() {
         List<Incidencia> cerradas = repo.obtenerTodas().stream()
             .filter(i -> i.getFechaCierre() != null && i.getTecnicoAsignado() != null)
