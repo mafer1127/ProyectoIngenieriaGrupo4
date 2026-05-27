@@ -10,10 +10,12 @@ com\helpdesk\ui\components\CambioEstadoDialog$Resultado.class
 com\helpdesk\persistence\JsonPersistence$2.class
 com\helpdesk\ui\views\PanelResumenView.class
 com\helpdesk\ui\components\TecnicoFormDialog.class
+com\helpdesk\controller\ExportController.class
 com\helpdesk\persistence\JsonPersistence.class
 com\helpdesk\ui\views\PanelIncidenciasView$1.class
 com\helpdesk\model\Usuario.class
 com\helpdesk\ui\views\GestionTecnicosView$2.class
+com\helpdesk\ui\components\ExportDialog.class
 com\helpdesk\service\SessionManager.class
 com\helpdesk\ui\components\CambioEstadoDialog.class
 module-info.class

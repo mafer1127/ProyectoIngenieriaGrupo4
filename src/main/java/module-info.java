@@ -4,6 +4,16 @@ module com.helpdesk {
     requires javafx.graphics;
     requires com.google.gson;
     requires java.desktop;
+    requires java.net.http;
+
+    // iText PDF
+    requires kernel;
+    requires layout;
+    requires io;
+
+    // Apache POI (XLSX)
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     opens com.helpdesk to javafx.fxml;
     opens com.helpdesk.model to com.google.gson;

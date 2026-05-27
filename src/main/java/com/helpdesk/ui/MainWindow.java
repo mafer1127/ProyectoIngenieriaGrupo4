@@ -1,8 +1,6 @@
 package com.helpdesk.ui;
 
-import java.io.File;
-import java.time.LocalDate;
-
+import com.helpdesk.controller.ExportController;
 import com.helpdesk.model.Usuario;
 import com.helpdesk.service.ExportService;
 import com.helpdesk.service.IncidenciaService;
@@ -25,12 +23,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 
 public class MainWindow extends BorderPane {
 
     private final IncidenciaService service;
     private final ExportService     exportService;
+    private ExportController exportController;
 
     private PanelResumenView      vistaResumen;
     private PanelIncidenciasView  vistaIncidencias;
@@ -45,6 +43,7 @@ public class MainWindow extends BorderPane {
     public MainWindow(IncidenciaService service, ExportService exportService) {
         this.service       = service;
         this.exportService = exportService;
+        this.exportController = new ExportController(exportService);
         construirLayout();
     }
 
@@ -203,7 +202,7 @@ public class MainWindow extends BorderPane {
                 case "incidencias" -> { vistaIncidencias.cargarDatos(); activarVista(btn, vistaIncidencias, "DASHBOARD"); }
                 case "tecnicos"    -> { vistaTecnicos.cargarDatos();    activarVista(btn, vistaTecnicos, "DASHBOARD"); }
                 case "sla"         -> { vistaSLA.cargar();              activarVista(btn, vistaSLA, "DASHBOARD"); }
-                case "exportar"    -> exportarMesActual();
+                case "exportar"    -> exportController.abrirDialogo(getScene().getWindow());
             }
         });
         return btn;
@@ -231,29 +230,6 @@ public class MainWindow extends BorderPane {
         vista.setVisible(true);
     }
 
-    private void exportarMesActual() {
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Guardar CSV del mes actual");
-
-        LocalDate hoy = LocalDate.now();
-        String nombreArchivo = String.format("incidencias_%d_%02d.csv", hoy.getYear(), hoy.getMonthValue());
-        fc.setInitialFileName(nombreArchivo);
-
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
-
-        File f = fc.showSaveDialog(getScene().getWindow());
-        if (f == null) return;
-
-        try {
-            exportService.exportarMesActualCSV(f.getAbsolutePath());
-            UIHelper.alertInfo(
-                "Exportación completada",
-                "Se ha generado el CSV con las incidencias del mes actual."
-            );
-        } catch (Exception ex) {
-            UIHelper.alertError("Error al exportar", ex.getMessage());
-        }
-    }
 
 
 }
