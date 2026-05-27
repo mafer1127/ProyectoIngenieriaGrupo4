@@ -124,8 +124,10 @@ public class MainWindow extends BorderPane {
         if (esTecnico) sidebar.getChildren().addAll(btnIncidencias, btnSLA, btnGrafica);
         else sidebar.getChildren().add(btnIncidencias);
 
-        sidebar.getChildren().addAll(secConf);
-        if (esTecnico) sidebar.getChildren().add(btnTecnicos);
+        if (esTecnico) {
+            sidebar.getChildren().add(secConf);
+            sidebar.getChildren().add(btnTecnicos);
+        }
         
 
         return sidebar;

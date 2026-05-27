@@ -12,8 +12,10 @@ import com.helpdesk.model.Incidencia.Categoria;
 import com.helpdesk.model.Incidencia.Estado;
 import com.helpdesk.model.Incidencia.Prioridad;
 import com.helpdesk.model.Tecnico;
+import com.helpdesk.model.Usuario;
 import com.helpdesk.service.ExportService;
 import com.helpdesk.service.IncidenciaService;
+import com.helpdesk.service.SessionManager;
 import com.helpdesk.ui.components.CambioEstadoDialog;
 import com.helpdesk.ui.components.IncidenciaFormDialog;
 import com.helpdesk.util.UIHelper;
@@ -96,20 +98,25 @@ public class PanelIncidenciasView extends BorderPane {
         setTop(topBar);
 
         // ── Filtros ───────────────────────────────────────────────
-        HBox filtros = new HBox(8);
+        VBox filtros = new VBox(8);
         filtros.setPadding(new Insets(10, 20, 10, 20));
-        filtros.setAlignment(Pos.CENTER_LEFT);
         filtros.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #D5DEFD; -fx-border-width: 0 0 1 0;");
 
         tfBusqueda.setPromptText("🔍  Buscar…");
         tfBusqueda.getStyleClass().add("form-field");
-        tfBusqueda.setPrefWidth(180);
+        tfBusqueda.setPrefWidth(220);
         tfBusqueda.textProperty().addListener((o, v, n) -> aplicarFiltros());
 
         setupCombo(cbFiltroCategoria, "Categoría", getCategoriasOpts());
         setupCombo(cbFiltroPrioridad, "Prioridad", getPrioridadesOpts());
         setupCombo(cbFiltroEstado, "Estado", getEstadosOpts());
         setupCombo(cbFiltroTecnico, "Técnico", getTecnicosOpts());
+
+        // Anchos para que se vean los nombres completos
+        cbFiltroCategoria.setPrefWidth(160);
+        cbFiltroPrioridad.setPrefWidth(160);
+        cbFiltroEstado.setPrefWidth(160);
+        cbFiltroTecnico.setPrefWidth(160);
 
         dpDesde.setPromptText("Desde");
         dpDesde.getStyleClass().add("form-field");
@@ -126,8 +133,17 @@ public class PanelIncidenciasView extends BorderPane {
         btnLimpiar.getStyleClass().add("btn-secondary");
         btnLimpiar.setOnAction(e -> limpiarFiltros());
 
-        filtros.getChildren().addAll(tfBusqueda, cbFiltroCategoria, cbFiltroPrioridad,
-                cbFiltroEstado, cbFiltroTecnico, dpDesde, dpHasta, btnLimpiar);
+        // Primera fila de filtros
+        HBox fila1 = new HBox(12);
+        fila1.setAlignment(Pos.CENTER_LEFT);
+        fila1.getChildren().addAll(tfBusqueda, cbFiltroCategoria, cbFiltroPrioridad, cbFiltroEstado);
+
+        // Segunda fila de filtros
+        HBox fila2 = new HBox(12);
+        fila2.setAlignment(Pos.CENTER_LEFT);
+        fila2.getChildren().addAll(cbFiltroTecnico, dpDesde, dpHasta, btnLimpiar);
+
+        filtros.getChildren().addAll(fila1, fila2);
 
         // ── Tabla ───────────────────────────────────────────────
         construirTabla();
@@ -225,7 +241,31 @@ public class PanelIncidenciasView extends BorderPane {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+
+                if (empty) {
+                    setGraphic(null);
+                    return;
+                }
+
+                var rol = SessionManager.getInstance().getUsuario().getRol();
+
+                if (rol == Usuario.Rol.USUARIO_FINAL) {
+                    // Usuario final NO puede cambiar estado
+                    btnEstado.setVisible(false);
+                    btnEstado.setManaged(false);
+
+                    // Usuario final SÍ puede eliminar
+                    btnElim.setVisible(true);
+                    btnElim.setManaged(true);
+                } else {
+                    // Técnico ve todo
+                    btnEstado.setVisible(true);
+                    btnEstado.setManaged(true);
+                    btnElim.setVisible(true);
+                    btnElim.setManaged(true);
+                }
+
+                setGraphic(box);
                 setText(null);
             }
         });

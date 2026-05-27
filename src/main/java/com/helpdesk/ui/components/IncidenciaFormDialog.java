@@ -99,6 +99,17 @@ public class IncidenciaFormDialog extends Dialog<Incidencia> {
         }
 
         // ─────────────────────────────────────────────────────────────
+        // OCULTAR CAMPO TÉCNICO SI ES USUARIO FINAL
+        // ─────────────────────────────────────────────────────────────
+
+        var rol = com.helpdesk.service.SessionManager.getInstance().getUsuario().getRol();
+
+        if (rol == com.helpdesk.model.Usuario.Rol.USUARIO_FINAL) {
+            cbTec.setVisible(false);
+            cbTec.setManaged(false);
+        }
+
+        // ─────────────────────────────────────────────────────────────
         // GRID
         // ─────────────────────────────────────────────────────────────
 
@@ -119,6 +130,12 @@ public class IncidenciaFormDialog extends Dialog<Incidencia> {
         addRow(grid, row++, "Solicitante *", tfNombre);
         addRow(grid, row++, "Email *", tfEmail);
         addRow(grid, row++, "Técnico", cbTec);
+
+        if (rol == com.helpdesk.model.Usuario.Rol.USUARIO_FINAL) {
+            // El label está en la columna 0 de esa fila
+            ((Label) grid.getChildren().get((row - 1) * 2)).setVisible(false);
+            ((Label) grid.getChildren().get((row - 1) * 2)).setManaged(false);
+        }
 
         grid.add(lblError, 0, row, 2, 1);
 

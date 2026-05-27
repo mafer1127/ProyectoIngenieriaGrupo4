@@ -129,7 +129,7 @@ public class LoginView extends BorderPane {
         linkCrear.setOnMouseClicked(e -> cambiarModo(true));
         linksRow.getChildren().add(linkCrear);
 
-        Label hint = new Label("admin/admin123 · tecnico1/tecnico123 · usuario1/usuario123");
+        Label hint = new Label("");
         hint.getStyleClass().add("login-hint");
         hint.setWrapText(true);
         hint.setTextAlignment(TextAlignment.CENTER);
