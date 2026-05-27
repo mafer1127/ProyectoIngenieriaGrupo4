@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
@@ -59,15 +58,16 @@ public class LoginView extends BorderPane {
         logoCard = new VBox(16);
         logoCard.getStyleClass().add("login-logo-card");
         logoCard.setAlignment(Pos.CENTER);
-        logoCard.setMinWidth(300);
-        logoCard.setMaxWidth(300);
+        logoCard.setMinWidth(380);
+        logoCard.setMaxWidth(380);
+        logoCard.setSpacing(20);
 
         Label icoLogo  = new Label("🖥");
-        icoLogo.setStyle("-fx-font-size: 64px;");
+        icoLogo.setStyle("-fx-font-size: 90px;");
         Label logoTitle = new Label("HelpDesk");
         logoTitle.getStyleClass().add("login-logo-title");
         Label logoSub = new Label("Sistema de Gestión\nde Incidencias");
-        logoSub.setStyle("-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.75); -fx-alignment: CENTER;");
+        logoSub.getStyleClass().add("login-logo-sub");
         logoSub.setTextAlignment(TextAlignment.CENTER);
         logoCard.getChildren().addAll(icoLogo, logoTitle, logoSub);
 
@@ -85,8 +85,16 @@ public class LoginView extends BorderPane {
         // ── Layout central ────────────────────────────────────────────────────
         HBox center = new HBox(0, logoCard, formCard);
         center.setAlignment(Pos.CENTER);
-        StackPane wrapper = new StackPane(center);
+        center.setPrefWidth(Double.MAX_VALUE);
+
+        VBox wrapper = new VBox(center);
         wrapper.setAlignment(Pos.CENTER);
+        wrapper.setFillWidth(true);
+        wrapper.setPrefWidth(Double.MAX_VALUE);
+        wrapper.setPrefHeight(Double.MAX_VALUE);
+
+        //limitar altura para que el padding funcione
+        wrapper.setMaxHeight(500); 
         setCenter(wrapper);
     }
 
