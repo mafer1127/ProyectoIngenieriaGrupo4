@@ -1,0 +1,13 @@
+com\helpdesk\unit\CerrarSinTecnicoTest.class
+com\helpdesk\integration\AsignarTecnicoIntegracionTest.class
+com\helpdesk\integration\ExportarCSVIntegracionTest.class
+com\helpdesk\unit\HorasResolucionTest.class
+com\helpdesk\unit\TecnicoInactivoTest.class
+com\helpdesk\system\SistemaExportacionPDFTest.class
+com\helpdesk\unit\ValidacionEmailTest.class
+com\helpdesk\integration\CrearIncidenciaIntegracionTest.class
+com\helpdesk\integration\IncidenciasMesActualIntegracionTest.class
+com\helpdesk\system\SistemaCrearIncidenciaTest.class
+com\helpdesk\system\SistemaKPIsPrioridadTest.class
+com\helpdesk\system\AlertasCriticasSistemaTest.class
+com\helpdesk\system\ExportacionXLSXSistemaTest.class

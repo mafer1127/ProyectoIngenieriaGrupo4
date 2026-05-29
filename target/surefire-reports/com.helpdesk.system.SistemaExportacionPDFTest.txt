@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+Test set: com.helpdesk.system.SistemaExportacionPDFTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.723 s <<< FAILURE! -- in com.helpdesk.system.SistemaExportacionPDFTest
+com.helpdesk.system.SistemaExportacionPDFTest.exportarPDF_sinErrores -- Time elapsed: 1.672 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.StringIndexOutOfBoundsException: Range [0, 8) out of bounds for length 6
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:36)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3168)
+	at com.helpdesk.system.SistemaExportacionPDFTest.exportarPDF_sinErrores(SistemaExportacionPDFTest.java:61)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: java.lang.StringIndexOutOfBoundsException: Range [0, 8) out of bounds for length 6
+	at java.base/jdk.internal.util.Preconditions$1.apply(Preconditions.java:55)
+	at java.base/jdk.internal.util.Preconditions$1.apply(Preconditions.java:52)
+	at java.base/jdk.internal.util.Preconditions$4.apply(Preconditions.java:213)
+	at java.base/jdk.internal.util.Preconditions$4.apply(Preconditions.java:210)
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:98)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckFromToIndex(Preconditions.java:112)
+	at java.base/jdk.internal.util.Preconditions.checkFromToIndex(Preconditions.java:349)
+	at java.base/java.lang.String.checkBoundsBeginEnd(String.java:4849)
+	at java.base/java.lang.String.substring(String.java:2823)
+	at com.helpdesk.service.ExportService.exportarInformeMensualPDF(ExportService.java:285)
+	at com.helpdesk.system.SistemaExportacionPDFTest.lambda$exportarPDF_sinErrores$0(SistemaExportacionPDFTest.java:62)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+

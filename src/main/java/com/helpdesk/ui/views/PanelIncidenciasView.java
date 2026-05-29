@@ -34,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -41,6 +42,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+
 
 public class PanelIncidenciasView extends BorderPane {
 
@@ -229,6 +231,12 @@ public class PanelIncidenciasView extends BorderPane {
                 btnEditar.getStyleClass().add("btn-icon");
                 btnEstado.getStyleClass().add("btn-icon");
                 btnElim.getStyleClass().add("btn-icon");
+
+                // ─── TOOLTIP ───────────────────────────────
+                Tooltip.install(btnVer,    new Tooltip("Ver resumen"));
+                Tooltip.install(btnEditar, new Tooltip("Editar incidencia"));
+                Tooltip.install(btnEstado, new Tooltip("Cambiar estado"));
+                Tooltip.install(btnElim,   new Tooltip("Eliminar incidencia"));
 
                 box.setAlignment(Pos.CENTER);
 

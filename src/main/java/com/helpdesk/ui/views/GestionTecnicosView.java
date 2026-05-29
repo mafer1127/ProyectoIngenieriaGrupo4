@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -97,6 +98,10 @@ public class GestionTecnicosView extends BorderPane {
             {
                 btnEditar.getStyleClass().add("btn-icon");
                 btnElim.getStyleClass().add("btn-icon");
+
+                // ─── TOOLTIP COMO YOUTUBE ───────────────────────────────
+                Tooltip.install(btnEditar, new Tooltip("Editar técnico"));
+                Tooltip.install(btnElim,   new Tooltip("Eliminar técnico"));
 
                 box.setAlignment(Pos.CENTER);
 
