@@ -1,4 +1,0 @@
---patch-module
-com.helpdesk=_
---add-reads
-com.helpdesk=ALL-UNNAMED
